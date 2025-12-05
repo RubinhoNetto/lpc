@@ -17,9 +17,9 @@ config :lpc, Lpc.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 config :lpc, LpcWeb.Endpoint,
-  # Binding to loopback ipv4 address prevents access from other machines.
-  # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}],
+  # Binding to all interfaces to allow Docker access
+  # Use {127, 0, 0, 1} if running locally without Docker
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,

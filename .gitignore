@@ -35,3 +35,19 @@ lpc-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Environment variables
+.env
+.env.local
+
+# Docker
+compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

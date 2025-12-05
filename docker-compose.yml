@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lpc_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      target: dev
+    command: sh -c "mix ecto.create && mix ecto.migrate && mix phx.server"
+    ports:
+      - "4008:4000"
+    environment:
+      MIX_ENV: dev
+      DATABASE_URL: ecto://postgres:postgres@db/lpc_dev
+      SECRET_KEY_BASE: "developmentsecretkey1234567890123456789012345678901234567890123456789012345678"
+      PHX_HOST: localhost
+      PHX_SERVER: "true"
+    volumes:
+      - .:/app
+      - /app/_build
+      - /app/deps
+      - /app/assets/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+

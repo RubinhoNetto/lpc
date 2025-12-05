@@ -22,6 +22,15 @@ end
 
 config :lpc, LpcWeb.Endpoint, http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+# Configuração de banco de dados para dev (Docker)
+if config_env() == :dev do
+  if database_url = System.get_env("DATABASE_URL") do
+    config :lpc, Lpc.Repo,
+      url: database_url,
+      pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  end
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
